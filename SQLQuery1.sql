@@ -2,6 +2,13 @@
 GO
 USE DapperMTMDB
 
+CREATE TABLE Genres(
+[GenreId] INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+[Genre] NVARCHAR(100) NOT NULL UNIQUE,
+CHECK(TRIM([Genre]) <>'')
+)
+
+GO
 CREATE TABLE Books(
 BookId INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
 [Name] NVARCHAR(200) NOT NULL UNIQUE,
@@ -9,13 +16,7 @@ CHECK(TRIM([Name]) <> ''),
 [GenreId] INT FOREIGN KEY REFERENCES Genres(GenreId) NOT NULL
 )
 
-GO
 
-CREATE TABLE Genres(
-[GenreId] INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-[Genre] NVARCHAR(100) NOT NULL UNIQUE,
-CHECK(TRIM([Genre]) <>'')
-)
 GO
 
 CREATE TABLE Authors(
@@ -69,23 +70,24 @@ VALUES('Frank Herbert', 65, 41),
 
 
 GO
-
 INSERT INTO BookAuthors([BookId],[AuthorId])
-VALUES(2,1),
-(3,2),
-(4,3),(4,4),(4,5),(4,6),
-(5,7),
-(6,8),
-(7,7),(7,9)
+VALUES(1,1),
+(2,2),
+(3,3),(3,4),(3,5),(3,6),
+(4,7),
+(5,8),
+(6,7),(6,9)
 
 SELECT B.[Name], G.Genre
 FROM Books AS B
 INNER JOIN Genres AS G
 ON G.GenreId = B.GenreId
 
-SELECT B.[Name], A.FullName
+SELECT B.BookId, B.[Name], A.AuthorId, A.FullName, G.GenreId, G.Genre
 FROM BOOKS AS B
 INNER JOIN BookAuthors AS BA
 ON B.BookId = BA.BookId
 	INNER JOIN Authors AS A
 	ON A.AuthorId = BA.AuthorId
+INNER JOIN Genres AS G
+ON G.GenreId =B.GenreId
