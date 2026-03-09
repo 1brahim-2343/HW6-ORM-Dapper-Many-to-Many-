@@ -7,7 +7,7 @@ namespace HW6_ORM_Dapper_Many_to_Many_
     internal class Program
     {
 
-        static string ConnectionString = "Data Source=(localdb)\\ProjectModels;Initial Catalog=DapperMTMDB;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False;Command Timeout=30";
+        static string ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=DapperMTMDB;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False;Command Timeout=30";
 
 
         static void Main(string[] args)
@@ -57,7 +57,7 @@ namespace HW6_ORM_Dapper_Many_to_Many_
             //        return groupedBook;
             //    }); //!
 
-            //    foreach (var book in books)
+            //    foreach (var book in result)
             //    {
             //        Console.WriteLine($"{book}");
             //        if (book.Authors.Any())
@@ -81,8 +81,8 @@ namespace HW6_ORM_Dapper_Many_to_Many_
                     FROM Books AS B 
                     INNER JOIN BookAuthors AS BA
                     ON B.BookId = BA.BookId
-	                    INNER JOIN Authors AS A
-	                    ON A.AuthorId = BA.AuthorId
+                     INNER JOIN Authors AS A
+                     ON A.AuthorId = BA.AuthorId
                     INNER JOIN Genres AS G
                     ON G.GenreId =B.GenreId";
                 var books = connection.Query<Book, Author, Gerne, Book>(sql,
@@ -92,7 +92,7 @@ namespace HW6_ORM_Dapper_Many_to_Many_
                         book.Genre = genre;
                         return book;
 
-                    }, splitOn: "AuthorId,GenreId");
+                    }, splitOn: "BookId,AuthorId,GenreId");
                 var result = books.GroupBy(b => b.BookId).Select(g =>
                 {
                     var groupedBookBucket = g.First();
